@@ -1,5 +1,13 @@
-import os
-from django.core.wsgi import get_wsgi_application
+# --- Auto-migrate on startup (temporary for Render) ---
+import threading, os
+from django.core.management import call_command
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'store_project.settings')
-application = get_wsgi_application()
+def run_migrations():
+    try:
+        call_command("migrate", interactive=False)
+        print("✅ Database migrated successfully.")
+    except Exception as e:
+        print("❌ Migration failed:", e)
+
+# Run in a separate thread so it doesn't block startup
+threading.Thread(target=run_migrations).start()
