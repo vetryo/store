@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Cart</h2>
+{% if items %}
+  <div class="list-group mb-3">
+    {% for item in items %}
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="mb-1">{{ item.product.name }}</h6>
+          <small>Price: ${{ item.product.price }} × {{ item.qty }} = ${{ item.line_total }}</small>
+        </div>
+        <div>
+          <a href="{% url 'update_cart' item.product.id 'add' %}" class="btn btn-sm btn-outline-primary">+</a>
+          <a href="{% url 'update_cart' item.product.id 'remove' %}" class="btn btn-sm btn-outline-danger">-</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <h4>Total: ${{ total }}</h4>
+  <a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
+  <a href="{% url 'clear_cart' %}" class="btn btn-danger">Clear Cart</a>
+{% else %}
+  <p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}
